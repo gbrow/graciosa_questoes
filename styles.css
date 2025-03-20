@@ -90,7 +90,6 @@ h1 {
   cursor: pointer;
   position: relative;
   transition: opacity 0.3s ease, transform 0.2s ease;
-  z-index: 0; /* Garante que o tooltip fique na frente */
 }
 
 .ball:hover {
@@ -105,7 +104,7 @@ h1 {
 /* Tooltip ajustado */
 .ball:hover::after {
   content: attr(data-question);
-  position: absolute;
+  position: fixed;
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
@@ -116,7 +115,7 @@ h1 {
   white-space: normal;
   max-width: 300px;
   width: max-content;
-  z-index: 9999; /* Garante que o tooltip fique na frente */
+  z-index: 1000; /* Garante que o tooltip fique na frente */
   word-wrap: break-word;
   font-size: 0.9rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -127,6 +126,22 @@ h1 {
   left: 50%;
   transform: translateX(-50%);
   margin-left: 0;
+}
+
+.tooltip {
+  position: fixed;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  white-space: normal;
+  max-width: 300px;
+  width: max-content;
+  z-index: 9999;
+  word-wrap: break-word;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  pointer-events: none; /* Evita que o tooltip interfira com interações */
 }
 
 /* Responsividade */
