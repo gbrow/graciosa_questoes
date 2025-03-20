@@ -1,82 +1,102 @@
 {
   "TEMA": {
     "label": "Grupo",
-    "description": "Filtre as perguntas por grupo temático."
+    "description": "Filtre as perguntas por grupo temático.",
+    "enabled": true
   },
   "SUBTEMA": {
     "label": "Tema",
-    "description": "Filtre as perguntas por subtema."
+    "description": "Filtre as perguntas por subtema.",
+    "enabled": true
   },
   "ORIGEM": {
     "label": "Origem",
-    "description": "Filtre as perguntas por origem (quem fez a pergunta)."
+    "description": "Filtre as perguntas por origem (quem fez a pergunta).",
+    "enabled": true
   },
   "FACILIDADE_DE_RESPOSTA": {
     "label": "Facilidade de Resposta",
-    "description": "Filtre as perguntas pela facilidade de resposta."
+    "description": "Filtre as perguntas pela facilidade de resposta.",
+    "enabled": true
   },
   "NECESSIDADE_DE_EQUIPAMENTO": {
     "label": "Necessidade de Equipamento",
-    "description": "Filtre as perguntas pela necessidade de equipamento."
+    "description": "Filtre as perguntas pela necessidade de equipamento.",
+    "enabled": true
   },
   "TEMPO_PARA_RESPOSTA": {
     "label": "Tempo para Resposta",
-    "description": "Filtre as perguntas pela necessidade de tempo para darmos a resposta."
+    "description": "Filtre as perguntas pela necessidade de tempo para darmos a resposta.",
+    "enabled": true
   },
   "VAMOS_RESPONDER": {
     "label": "Vamos Responder?",
-    "description": "Filtre as perguntas pela certeza que vamos responder ou não."
+    "description": "Filtre as perguntas pela certeza que vamos responder ou não.",
+    "enabled": false
   },
   "OBS": {
     "label": "Observação",
-    "description": "Filtre as perguntas pela observação."
+    "description": "Filtre as perguntas pela observação.",
+    "enabled": false
   },
   "PROCEDIMENTOS_METODOLOGICOS": {
     "label": "Procedimentos Metodológicos",
-    "description": "Filtre as perguntas pelo Procedimento Metodológico."
+    "description": "Filtre as perguntas pelo Procedimento Metodológico.",
+    "enabled": true
   },
   "PROCEDIMENTO_METODOLOGICO_INDICADO": {
     "label": "Descrição do Procedimentos Metodológicos",
-    "description": "Filtre as perguntas pela descrição Procedimento Metodológico."
+    "description": "Filtre as perguntas pela descrição Procedimento Metodológico.",
+    "enabled": false
   },
   "G1": {
     "label": "Legislação e Regularização Fundiária",
-    "description": "Perguntas relacionadas à aplicação de leis, regularização fundiária, zoneamento e conformidade com normas ambientais e urbanísticas."
+    "description": "Perguntas relacionadas à aplicação de leis, regularização fundiária, zoneamento e conformidade com normas ambientais e urbanísticas.",
+    "enabled": true
   },
   "G2": {
     "label": "Áreas de Preservação Permanente (APPs) e Áreas de Proteção Ambiental (APA)",
-    "description": "Perguntas sobre a identificação, delimitação, degradação e recuperação de APPs e APAs, incluindo nascentes, cursos d'água e vegetação."
+    "description": "Perguntas sobre a identificação, delimitação, degradação e recuperação de APPs e APAs, incluindo nascentes, cursos d'água e vegetação.",
+    "enabled": true
   },
   "G3": {
     "label": "Degradação Ambiental e Recuperação",
-    "description": "Perguntas sobre a degradação ambiental, impactos negativos, danos causados, e possíveis medidas de recuperação e mitigação."
+    "description": "Perguntas sobre a degradação ambiental, impactos negativos, danos causados, e possíveis medidas de recuperação e mitigação.",
+    "enabled": true
   },
   "G4": {
     "label": "Infraestrutura e Serviços Públicos",
-    "description": "Perguntas sobre a infraestrutura existente na comunidade, como saneamento básico, energia elétrica, coleta de resíduos, e acesso a serviços públicos."
+    "description": "Perguntas sobre a infraestrutura existente na comunidade, como saneamento básico, energia elétrica, coleta de resíduos, e acesso a serviços públicos.",
+    "enabled": true
   },
   "G5": {
     "label": "Aspectos Sociais e Econômicos",
-    "description": "Perguntas sobre a geração de renda, ocupação do solo, condições de vida da comunidade, e impactos sociais da possível desocupação."
+    "description": "Perguntas sobre a geração de renda, ocupação do solo, condições de vida da comunidade, e impactos sociais da possível desocupação.",
+    "enabled": true
   },
   "G6": {
     "label": "Vegetação e Biodiversidade",
-    "description": "Perguntas sobre a cobertura vegetal, espécies nativas, fauna, flora, e impactos da ocupação humana na biodiversidade."
+    "description": "Perguntas sobre a cobertura vegetal, espécies nativas, fauna, flora, e impactos da ocupação humana na biodiversidade.",
+    "enabled": true
   },
   "G7": {
     "label": "Metodologias de Investigação e Análise",
-    "description": "Perguntas sobre as metodologias a serem utilizadas na perícia, incluindo técnicas de sensoriamento remoto, geoprocessamento, levantamento de campo, e análise de dados."
+    "description": "Perguntas sobre as metodologias a serem utilizadas na perícia, incluindo técnicas de sensoriamento remoto, geoprocessamento, levantamento de campo, e análise de dados.",
+    "enabled": true
   },
   "G8": {
     "label": "Impactos Antrópicos e Riscos Ambientais",
-    "description": "Perguntas sobre os impactos causados pela ocupação humana, riscos ambientais, e medidas de mitigação."
+    "description": "Perguntas sobre os impactos causados pela ocupação humana, riscos ambientais, e medidas de mitigação.",
+    "enabled": true
   },
   "G9": {
     "label": "Serviços Ecossistêmicos",
-    "description": "Perguntas sobre os serviços ecossistêmicos prestados pela área, como regulação climática, controle de erosão, e provisão de água."
+    "description": "Perguntas sobre os serviços ecossistêmicos prestados pela área, como regulação climática, controle de erosão, e provisão de água.",
+    "enabled": true
   },
   "G10": {
     "label": "Documentação e Relatórios Técnicos",
-    "description": "Perguntas sobre a documentação, mapas, relatórios fotográficos, e apresentação dos resultados da perícia."
+    "description": "Perguntas sobre a documentação, mapas, relatórios fotográficos, e apresentação dos resultados da perícia.",
+    "enabled": true
   }
 }

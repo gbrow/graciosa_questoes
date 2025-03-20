@@ -40,44 +40,47 @@ function createFilters(columns) {
 
   columns.forEach(column => {
     if (column !== "COD" && column !== "QUESTAO") { // Ignora colunas específicas
-      const filterId = `${column.toLowerCase()}-filter`;
+      // Verifica se o filtro está habilitado no JSON
+      if (config[column]?.enabled) {
+        const filterId = `${column.toLowerCase()}-filter`;
 
-      const filterGroup = document.createElement("div");
-      filterGroup.className = "filter-group";
+        const filterGroup = document.createElement("div");
+        filterGroup.className = "filter-group";
 
-      const filterLabel = document.createElement("label");
-      filterLabel.setAttribute("for", filterId);
+        const filterLabel = document.createElement("label");
+        filterLabel.setAttribute("for", filterId);
 
-      // Usa o mapeamento do JSON para o rótulo
-      const labelText = config[column]?.label || column;
-      filterLabel.textContent = labelText;
+        // Usa o mapeamento do JSON para o rótulo
+        const labelText = config[column]?.label || column;
+        filterLabel.textContent = labelText;
 
-      // Adiciona o ícone de tooltip
-      if (config[column]?.description) {
-        const tooltipIcon = document.createElement("span");
-        tooltipIcon.className = "tooltip-icon";
-        tooltipIcon.setAttribute("data-tooltip", config[column].description);
-        tooltipIcon.textContent = "ⓘ"; // Ícone de informação
-        filterLabel.appendChild(tooltipIcon);
+        // Adiciona o ícone de tooltip
+        if (config[column]?.description) {
+          const tooltipIcon = document.createElement("span");
+          tooltipIcon.className = "tooltip-icon";
+          tooltipIcon.setAttribute("data-tooltip", config[column].description);
+          tooltipIcon.textContent = "ⓘ"; // Ícone de informação
+          filterLabel.appendChild(tooltipIcon);
+        }
+
+        const filterSelect = document.createElement("select");
+        filterSelect.id = filterId;
+        filterSelect.innerHTML = '<option value="all">Todos</option>';
+
+        filterGroup.appendChild(filterLabel);
+        filterGroup.appendChild(filterSelect);
+        filtersContainer.appendChild(filterGroup);
+
+        // Adiciona event listener para atualizar os filtros
+        filterSelect.addEventListener("change", () => {
+          filters[column] = filterSelect.value;
+          updateFilters();
+          renderBalls();
+        });
+
+        // Inicializa o filtro com valor "all"
+        filters[column] = "all";
       }
-
-      const filterSelect = document.createElement("select");
-      filterSelect.id = filterId;
-      filterSelect.innerHTML = '<option value="all">Todos</option>';
-
-      filterGroup.appendChild(filterLabel);
-      filterGroup.appendChild(filterSelect);
-      filtersContainer.appendChild(filterGroup);
-
-      // Adiciona event listener para atualizar os filtros
-      filterSelect.addEventListener("change", () => {
-        filters[column] = filterSelect.value;
-        updateFilters();
-        renderBalls();
-      });
-
-      // Inicializa o filtro com valor "all"
-      filters[column] = "all";
     }
   });
 
