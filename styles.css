@@ -161,7 +161,6 @@ h1 {
   padding: 8px;
   border-radius: 4px;
   white-space: nowrap;
-  z-index: 1000;
   font-size: 0.8rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
