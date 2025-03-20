@@ -127,35 +127,7 @@ h1 {
   margin-left: 0;
 }
 
-.tooltip {
-  position: fixed;
-  background-color: #333;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  white-space: normal;
-  max-width: 300px;
-  width: max-content;
-  z-index: 9999;
-  word-wrap: break-word;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  pointer-events: none; /* Evita que o tooltip interfira com interações */
-}
 
-/* Responsividade */
-/* @media (max-width: 768px) {*/
-  .main-content {
-    flex-direction: column;
-  }
-
-  .filters-column {
-    max-width: 100%;
-  }
-
-  .balls-container {
-    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-  }
   /* Estilo do ícone de tooltip */
 .tooltip-icon {
   margin-left: 5px;
@@ -174,9 +146,10 @@ h1 {
   background-color: #333;
   color: white;
   padding: 8px;
+  max-width: 300px;
+  width: max-content;
   border-radius: 4px;
   white-space: nowrap;
   font-size: 0.8rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-/*}*/
