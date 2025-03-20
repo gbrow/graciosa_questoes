@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perícia Socioambiental - Visualização Interativa</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Perícia Socioambiental - Visualização Interativa</h1>
+
+  <div class="filters">
+    <label for="group-filter">Filtrar por Grupo:</label>
+    <select id="group-filter">
+      <option value="all">Todos</option>
+    </select>
+
+    <label for="theme-filter">Filtrar por Tema:</label>
+    <select id="theme-filter">
+      <option value="all">Todos</option>
+    </select>
+
+    <label for="origin-filter">Filtrar por Origem:</label>
+    <select id="origin-filter">
+      <option value="all">Todos</option>
+    </select>
+  </div>
+
+  <div class="balls-container" id="balls-container">
+    <!-- As bolas serão geradas dinamicamente pelo JavaScript -->
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
