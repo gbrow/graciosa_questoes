@@ -149,7 +149,8 @@ h1 {
   max-width: 300px;
   width: max-content;
   border-radius: 4px;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
   font-size: 0.8rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
