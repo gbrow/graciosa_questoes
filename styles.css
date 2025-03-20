@@ -1,34 +1,77 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
-  margin: 0;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
 }
 
 h1 {
   text-align: center;
-  color: #333;
-}
-
-.filters {
   margin-bottom: 20px;
-  text-align: center;
+  font-size: 2rem;
+  color: #007bff;
 }
 
-.filters label {
-  margin-right: 10px;
+/* Layout dos filtros */
+.filters-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
 }
 
+.filter-group {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #555;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.filter-group select:hover {
+  border-color: #007bff;
+}
+
+/* Layout das bolinhas */
 .balls-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
   gap: 10px;
   justify-content: center;
 }
 
 .ball {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: #007bff;
   color: white;
@@ -37,7 +80,11 @@ h1 {
   justify-content: center;
   cursor: pointer;
   position: relative;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.ball:hover {
+  transform: scale(1.1);
 }
 
 .ball.inactive {
@@ -48,7 +95,7 @@ h1 {
 .ball:hover::after {
   content: attr(data-question);
   position: absolute;
-  top: 50px;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
@@ -60,4 +107,17 @@ h1 {
   width: max-content;
   z-index: 10;
   word-wrap: break-word;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .filters-container {
+    grid-template-columns: 1fr;
+  }
+
+  .balls-container {
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  }
 }

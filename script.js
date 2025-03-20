@@ -29,6 +29,10 @@ function createFilters(columns) {
   columns.forEach(column => {
     if (column !== "COD" && column !== "QUESTAO") { // Ignora colunas específicas
       const filterId = `${column.toLowerCase()}-filter`;
+
+      const filterGroup = document.createElement("div");
+      filterGroup.className = "filter-group";
+
       const filterLabel = document.createElement("label");
       filterLabel.setAttribute("for", filterId);
       filterLabel.textContent = `Filtrar por ${column}:`;
@@ -37,8 +41,9 @@ function createFilters(columns) {
       filterSelect.id = filterId;
       filterSelect.innerHTML = '<option value="all">Todos</option>';
 
-      filtersContainer.appendChild(filterLabel);
-      filtersContainer.appendChild(filterSelect);
+      filterGroup.appendChild(filterLabel);
+      filterGroup.appendChild(filterSelect);
+      filtersContainer.appendChild(filterGroup);
 
       // Adiciona event listener para atualizar os filtros
       filterSelect.addEventListener("change", () => {
