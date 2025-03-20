@@ -51,18 +51,24 @@ function renderBalls() {
   ballsContainer.innerHTML = "";
 
   questions.forEach(q => {
+    const ball = document.createElement("div");
+    ball.className = "ball";
+    ball.textContent = q.COD;
+    ball.setAttribute("data-question", q.QUESTAO);
+    ball.setAttribute("data-group", q.TEMA);
+    ball.setAttribute("data-theme", q.SUBTEMA);
+    ball.setAttribute("data-origin", q.ORIGEM);
+
+    // Verifica se a bola deve ficar ativa ou inativa
     if (
-      (selectedGroup === "all" || q.TEMA === selectedGroup) &&
-      (selectedTheme === "all" || q.SUBTEMA === selectedTheme) &&
-      (selectedOrigin === "all" || q.ORIGEM === selectedOrigin)
+      (selectedGroup !== "all" && q.TEMA !== selectedGroup) ||
+      (selectedTheme !== "all" && q.SUBTEMA !== selectedTheme) ||
+      (selectedOrigin !== "all" && q.ORIGEM !== selectedOrigin)
     ) {
-      const ball = document.createElement("div");
-      ball.className = "ball";
-      ball.textContent = q.COD;
-      ball.setAttribute("data-question", q.QUESTAO);
-      ball.setAttribute("data-group", q.TEMA);
-      ballsContainer.appendChild(ball);
+      ball.classList.add("inactive");
     }
+
+    ballsContainer.appendChild(ball);
   });
 }
 
