@@ -41,8 +41,8 @@ h1 {
 }
 
 .ball.inactive {
-  opacity: 0.3; /* Bolinhas inativas ficam semi-transparentes */
-  pointer-events: none; /* Desativa interações com bolinhas inativas */
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .ball:hover::after {

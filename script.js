@@ -2,19 +2,54 @@ const ballsContainer = document.getElementById("balls-container");
 const groupFilter = document.getElementById("group-filter");
 const themeFilter = document.getElementById("theme-filter");
 const originFilter = document.getElementById("origin-filter");
+const csvUpload = document.getElementById("csv-upload");
 
 let questions = [];
 
-// Função para carregar o CSV
+// Função para carregar o CSV manualmente
+csvUpload.addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const csvData = e.target.result;
+      parseCSV(csvData);
+    };
+    reader.readAsText(file, "UTF-8"); // Força a leitura como UTF-8
+  }
+});
+
+// Função para carregar o CSV automaticamente (se estiver no servidor)
 function loadCSV() {
   Papa.parse("perguntas.csv", {
     download: true,
     header: true,
     delimiter: ";",
+    encoding: "UTF-8", // Garante a codificação UTF-8
     complete: function (results) {
       questions = results.data;
       populateFilters();
       renderBalls();
+    },
+    error: function (err) {
+      console.error("Erro ao carregar o CSV:", err);
+    },
+  });
+}
+
+// Função para processar o CSV
+function parseCSV(csvData) {
+  Papa.parse(csvData, {
+    header: true,
+    delimiter: ";",
+    encoding: "UTF-8", // Garante a codificação UTF-8
+    complete: function (results) {
+      questions = results.data;
+      populateFilters();
+      renderBalls();
+    },
+    error: function (err) {
+      console.error("Erro ao processar o CSV:", err);
     },
   });
 }
@@ -32,6 +67,7 @@ function populateFilters() {
 
 // Função para adicionar opções aos filtros
 function populateFilter(filter, options) {
+  filter.innerHTML = '<option value="all">Todos</option>'; // Reseta o filtro
   options.forEach(option => {
     if (option) {
       const optionElement = document.createElement("option");
@@ -77,5 +113,5 @@ groupFilter.addEventListener("change", renderBalls);
 themeFilter.addEventListener("change", renderBalls);
 originFilter.addEventListener("change", renderBalls);
 
-// Carrega os dados do CSV ao iniciar
+// Carrega os dados do CSV ao iniciar (se estiver no servidor)
 loadCSV();
