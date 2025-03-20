@@ -144,7 +144,7 @@ h1 {
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {*/
   .main-content {
     flex-direction: column;
   }
@@ -179,4 +179,4 @@ h1 {
   font-size: 0.8rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-}
+/*}*/
