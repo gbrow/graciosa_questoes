@@ -3,6 +3,18 @@ const ballsContainer = document.getElementById("balls-container");
 
 let questions = [];
 let filters = {};
+let config = {}; // Armazenará o mapeamento do JSON
+
+// Função para carregar o JSON de configuração
+async function loadConfig() {
+  try {
+    const response = await fetch("config.json");
+    config = await response.json();
+    loadCSV(); // Carrega o CSV após carregar o JSON
+  } catch (err) {
+    console.error("Erro ao carregar o arquivo de configuração:", err);
+  }
+}
 
 // Função para carregar o CSV
 function loadCSV() {
@@ -35,7 +47,19 @@ function createFilters(columns) {
 
       const filterLabel = document.createElement("label");
       filterLabel.setAttribute("for", filterId);
-      filterLabel.textContent = `Filtrar por ${column}:`;
+
+      // Usa o mapeamento do JSON para o rótulo
+      const labelText = config[column]?.label || column;
+      filterLabel.textContent = labelText;
+
+      // Adiciona o ícone de tooltip
+      if (config[column]?.description) {
+        const tooltipIcon = document.createElement("span");
+        tooltipIcon.className = "tooltip-icon";
+        tooltipIcon.setAttribute("data-tooltip", config[column].description);
+        tooltipIcon.textContent = "ⓘ"; // Ícone de informação
+        filterLabel.appendChild(tooltipIcon);
+      }
 
       const filterSelect = document.createElement("select");
       filterSelect.id = filterId;
@@ -124,5 +148,5 @@ function renderBalls() {
   });
 }
 
-// Carrega os dados do CSV ao iniciar
-loadCSV();
+// Carrega o JSON de configuração ao iniciar
+loadConfig();

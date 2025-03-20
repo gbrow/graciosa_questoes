@@ -1,0 +1,82 @@
+{
+  "TEMA": {
+    "label": "Grupo",
+    "description": "Filtre as perguntas por grupo temático."
+  },
+  "SUBTEMA": {
+    "label": "Tema",
+    "description": "Filtre as perguntas por subtema."
+  },
+  "ORIGEM": {
+    "label": "Origem",
+    "description": "Filtre as perguntas por origem (quem fez a pergunta)."
+  },
+  "FACILIDADE_DE_RESPOSTA": {
+    "label": "Facilidade de Resposta",
+    "description": "Filtre as perguntas pela facilidade de resposta."
+  },
+  "NECESSIDADE_DE_EQUIPAMENTO": {
+    "label": "Necessidade de Equipamento",
+    "description": "Filtre as perguntas pela necessidade de equipamento."
+  },
+  "TEMPO_PARA_RESPOSTA": {
+    "label": "Tempo para Resposta",
+    "description": "Filtre as perguntas pela necessidade de tempo para darmos a resposta."
+  },
+  "VAMOS_RESPONDER": {
+    "label": "Vamos Responder?",
+    "description": "Filtre as perguntas pela certeza que vamos responder ou não."
+  },
+  "OBS": {
+    "label": "Observação",
+    "description": "Filtre as perguntas pela observação."
+  },
+  "PROCEDIMENTOS_METODOLOGICOS": {
+    "label": "Procedimentos Metodológicos",
+    "description": "Filtre as perguntas pelo Procedimento Metodológico."
+  },
+  "PROCEDIMENTO_METODOLOGICO_INDICADO": {
+    "label": "Descrição do Procedimentos Metodológicos",
+    "description": "Filtre as perguntas pela descrição Procedimento Metodológico."
+  },
+  "G1": {
+    "label": "Legislação e Regularização Fundiária",
+    "description": "Perguntas relacionadas à aplicação de leis, regularização fundiária, zoneamento e conformidade com normas ambientais e urbanísticas."
+  },
+  "G2": {
+    "label": "Áreas de Preservação Permanente (APPs) e Áreas de Proteção Ambiental (APA)",
+    "description": "Perguntas sobre a identificação, delimitação, degradação e recuperação de APPs e APAs, incluindo nascentes, cursos d'água e vegetação."
+  },
+  "G3": {
+    "label": "Degradação Ambiental e Recuperação",
+    "description": "Perguntas sobre a degradação ambiental, impactos negativos, danos causados, e possíveis medidas de recuperação e mitigação."
+  },
+  "G4": {
+    "label": "Infraestrutura e Serviços Públicos",
+    "description": "Perguntas sobre a infraestrutura existente na comunidade, como saneamento básico, energia elétrica, coleta de resíduos, e acesso a serviços públicos."
+  },
+  "G5": {
+    "label": "Aspectos Sociais e Econômicos",
+    "description": "Perguntas sobre a geração de renda, ocupação do solo, condições de vida da comunidade, e impactos sociais da possível desocupação."
+  },
+  "G6": {
+    "label": "Vegetação e Biodiversidade",
+    "description": "Perguntas sobre a cobertura vegetal, espécies nativas, fauna, flora, e impactos da ocupação humana na biodiversidade."
+  },
+  "G7": {
+    "label": "Metodologias de Investigação e Análise",
+    "description": "Perguntas sobre as metodologias a serem utilizadas na perícia, incluindo técnicas de sensoriamento remoto, geoprocessamento, levantamento de campo, e análise de dados."
+  },
+  "G8": {
+    "label": "Impactos Antrópicos e Riscos Ambientais",
+    "description": "Perguntas sobre os impactos causados pela ocupação humana, riscos ambientais, e medidas de mitigação."
+  },
+  "G9": {
+    "label": "Serviços Ecossistêmicos",
+    "description": "Perguntas sobre os serviços ecossistêmicos prestados pela área, como regulação climática, controle de erosão, e provisão de água."
+  },
+  "G10": {
+    "label": "Documentação e Relatórios Técnicos",
+    "description": "Perguntas sobre a documentação, mapas, relatórios fotográficos, e apresentação dos resultados da perícia."
+  }
+}

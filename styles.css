@@ -25,19 +25,28 @@ h1 {
   color: #007bff;
 }
 
-/* Layout dos filtros */
-.filters-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
+/* Layout de duas colunas */
+.main-content {
+  display: flex;
+  gap: 20px;
 }
 
-.filter-group {
+.filters-column {
+  flex: 1;
+  max-width: 300px;
   background-color: #fff;
-  padding: 15px;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.balls-column {
+  flex: 2;
+}
+
+/* Estilo dos filtros */
+.filter-group {
+  margin-bottom: 20px;
 }
 
 .filter-group label {
@@ -92,6 +101,7 @@ h1 {
   pointer-events: none;
 }
 
+/* Tooltip ajustado */
 .ball:hover::after {
   content: attr(data-question);
   position: absolute;
@@ -105,19 +115,54 @@ h1 {
   white-space: normal;
   max-width: 300px;
   width: max-content;
-  z-index: 10;
+  z-index: 1000; /* Garante que o tooltip fique na frente */
   word-wrap: break-word;
   font-size: 0.9rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Ajuste para tooltips nas bordas */
+.ball:hover::after {
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: 0;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
-  .filters-container {
-    grid-template-columns: 1fr;
+  .main-content {
+    flex-direction: column;
+  }
+
+  .filters-column {
+    max-width: 100%;
   }
 
   .balls-container {
     grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
   }
+  /* Estilo do ícone de tooltip */
+.tooltip-icon {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.tooltip-icon:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 1000;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
 }
