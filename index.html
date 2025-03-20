@@ -9,24 +9,8 @@
 <body>
   <h1>Perícia Socioambiental - Visualização Interativa</h1>
 
-  <div class="filters">
-    <label for="csv-upload">Carregar CSV:</label>
-    <input type="file" id="csv-upload" accept=".csv">
-
-    <label for="group-filter">Filtrar por Grupo:</label>
-    <select id="group-filter">
-      <option value="all">Todos</option>
-    </select>
-
-    <label for="theme-filter">Filtrar por Tema:</label>
-    <select id="theme-filter">
-      <option value="all">Todos</option>
-    </select>
-
-    <label for="origin-filter">Filtrar por Origem:</label>
-    <select id="origin-filter">
-      <option value="all">Todos</option>
-    </select>
+  <div class="filters" id="filters">
+    <!-- Os filtros serão criados dinamicamente pelo JavaScript -->
   </div>
 
   <div class="balls-container" id="balls-container">

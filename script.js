@@ -1,34 +1,19 @@
+const filtersContainer = document.getElementById("filters");
 const ballsContainer = document.getElementById("balls-container");
-const groupFilter = document.getElementById("group-filter");
-const themeFilter = document.getElementById("theme-filter");
-const originFilter = document.getElementById("origin-filter");
-const csvUpload = document.getElementById("csv-upload");
 
 let questions = [];
+let filters = {};
 
-// Função para carregar o CSV manualmente
-csvUpload.addEventListener("change", function (event) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const csvData = e.target.result;
-      parseCSV(csvData);
-    };
-    reader.readAsText(file, "UTF-8"); // Força a leitura como UTF-8
-  }
-});
-
-// Função para carregar o CSV automaticamente (se estiver no servidor)
+// Função para carregar o CSV
 function loadCSV() {
   Papa.parse("perguntas.csv", {
     download: true,
     header: true,
     delimiter: ";",
-    encoding: "UTF-8", // Garante a codificação UTF-8
+    encoding: "UTF-8",
     complete: function (results) {
       questions = results.data;
-      populateFilters();
+      createFilters(results.meta.fields); // Cria os filtros com base nas colunas
       renderBalls();
     },
     error: function (err) {
@@ -37,53 +22,82 @@ function loadCSV() {
   });
 }
 
-// Função para processar o CSV
-function parseCSV(csvData) {
-  Papa.parse(csvData, {
-    header: true,
-    delimiter: ";",
-    encoding: "UTF-8", // Garante a codificação UTF-8
-    complete: function (results) {
-      questions = results.data;
-      populateFilters();
-      renderBalls();
-    },
-    error: function (err) {
-      console.error("Erro ao processar o CSV:", err);
-    },
+// Função para criar os filtros dinamicamente
+function createFilters(columns) {
+  filtersContainer.innerHTML = ""; // Limpa os filtros existentes
+
+  columns.forEach(column => {
+    if (column !== "COD" && column !== "QUESTAO") { // Ignora colunas específicas
+      const filterId = `${column.toLowerCase()}-filter`;
+      const filterLabel = document.createElement("label");
+      filterLabel.setAttribute("for", filterId);
+      filterLabel.textContent = `Filtrar por ${column}:`;
+
+      const filterSelect = document.createElement("select");
+      filterSelect.id = filterId;
+      filterSelect.innerHTML = '<option value="all">Todos</option>';
+
+      filtersContainer.appendChild(filterLabel);
+      filtersContainer.appendChild(filterSelect);
+
+      // Adiciona event listener para atualizar os filtros
+      filterSelect.addEventListener("change", () => {
+        filters[column] = filterSelect.value;
+        updateFilters();
+        renderBalls();
+      });
+
+      // Inicializa o filtro com valor "all"
+      filters[column] = "all";
+    }
   });
+
+  updateFilterOptions(); // Atualiza as opções dos filtros
 }
 
-// Função para popular os filtros
-function populateFilters() {
-  const groups = [...new Set(questions.map(q => q.TEMA))];
-  const themes = [...new Set(questions.map(q => q.SUBTEMA))];
-  const origins = [...new Set(questions.map(q => q.ORIGEM))];
+// Função para atualizar as opções dos filtros com base nas seleções
+function updateFilters() {
+  const filteredQuestions = questions.filter(q => {
+    return Object.keys(filters).every(key => {
+      return filters[key] === "all" || q[key] === filters[key];
+    });
+  });
 
-  populateFilter(groupFilter, groups);
-  populateFilter(themeFilter, themes);
-  populateFilter(originFilter, origins);
+  updateFilterOptions(filteredQuestions);
 }
 
-// Função para adicionar opções aos filtros
-function populateFilter(filter, options) {
-  filter.innerHTML = '<option value="all">Todos</option>'; // Reseta o filtro
-  options.forEach(option => {
-    if (option) {
-      const optionElement = document.createElement("option");
-      optionElement.value = option;
-      optionElement.textContent = option;
-      filter.appendChild(optionElement);
+// Função para atualizar as opções de cada filtro
+function updateFilterOptions(filteredQuestions = questions) {
+  const filterSelects = filtersContainer.querySelectorAll("select");
+
+  filterSelects.forEach(filterSelect => {
+    const column = filterSelect.id.replace("-filter", "").toUpperCase();
+    const currentValue = filterSelect.value;
+
+    const uniqueValues = [...new Set(filteredQuestions.map(q => q[column]))];
+    filterSelect.innerHTML = '<option value="all">Todos</option>';
+
+    uniqueValues.forEach(value => {
+      if (value) {
+        const optionElement = document.createElement("option");
+        optionElement.value = value;
+        optionElement.textContent = value;
+        filterSelect.appendChild(optionElement);
+      }
+    });
+
+    // Mantém a seleção atual, se ainda estiver disponível
+    if (uniqueValues.includes(currentValue)) {
+      filterSelect.value = currentValue;
+    } else {
+      filterSelect.value = "all";
+      filters[column] = "all";
     }
   });
 }
 
 // Função para renderizar as bolas
 function renderBalls() {
-  const selectedGroup = groupFilter.value;
-  const selectedTheme = themeFilter.value;
-  const selectedOrigin = originFilter.value;
-
   ballsContainer.innerHTML = "";
 
   questions.forEach(q => {
@@ -91,16 +105,13 @@ function renderBalls() {
     ball.className = "ball";
     ball.textContent = q.COD;
     ball.setAttribute("data-question", q.QUESTAO);
-    ball.setAttribute("data-group", q.TEMA);
-    ball.setAttribute("data-theme", q.SUBTEMA);
-    ball.setAttribute("data-origin", q.ORIGEM);
 
     // Verifica se a bola deve ficar ativa ou inativa
-    if (
-      (selectedGroup !== "all" && q.TEMA !== selectedGroup) ||
-      (selectedTheme !== "all" && q.SUBTEMA !== selectedTheme) ||
-      (selectedOrigin !== "all" && q.ORIGEM !== selectedOrigin)
-    ) {
+    const isActive = Object.keys(filters).every(key => {
+      return filters[key] === "all" || q[key] === filters[key];
+    });
+
+    if (!isActive) {
       ball.classList.add("inactive");
     }
 
@@ -108,10 +119,5 @@ function renderBalls() {
   });
 }
 
-// Event listeners para os filtros
-groupFilter.addEventListener("change", renderBalls);
-themeFilter.addEventListener("change", renderBalls);
-originFilter.addEventListener("change", renderBalls);
-
-// Carrega os dados do CSV ao iniciar (se estiver no servidor)
+// Carrega os dados do CSV ao iniciar
 loadCSV();
