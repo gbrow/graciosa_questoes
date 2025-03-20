@@ -90,6 +90,7 @@ h1 {
   cursor: pointer;
   position: relative;
   transition: opacity 0.3s ease, transform 0.2s ease;
+  z-index: 900; /* Garante que o tooltip fique na frente */
 }
 
 .ball:hover {
