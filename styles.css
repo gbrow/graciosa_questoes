@@ -88,7 +88,6 @@ h1 {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  position: relative;
   transition: opacity 0.3s ease, transform 0.2s ease;
 }
 

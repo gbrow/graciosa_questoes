@@ -63,20 +63,38 @@ function createFilters(columns) {
           filterLabel.appendChild(tooltipIcon);
         }
 
-        const filterSelect = document.createElement("select");
-        filterSelect.id = filterId;
-        filterSelect.innerHTML = '<option value="all">Todos</option>';
+        // Cria o filtro com base no tipo especificado no JSON
+        if (config[column].type === "list") {
+          const filterSelect = document.createElement("select");
+          filterSelect.id = filterId;
+          filterSelect.innerHTML = '<option value="all">Todos</option>';
 
-        filterGroup.appendChild(filterLabel);
-        filterGroup.appendChild(filterSelect);
-        filtersContainer.appendChild(filterGroup);
+          filterGroup.appendChild(filterLabel);
+          filterGroup.appendChild(filterSelect);
+          filtersContainer.appendChild(filterGroup);
 
-        // Adiciona event listener para atualizar os filtros
-        filterSelect.addEventListener("change", () => {
-          filters[column] = filterSelect.value;
-          updateFilters();
-          renderBalls();
-        });
+          // Adiciona event listener para atualizar os filtros
+          filterSelect.addEventListener("change", () => {
+            filters[column] = filterSelect.value;
+            updateFilters();
+            renderBalls();
+          });
+        } else if (config[column].type === "checkbox") {
+          const filterCheckbox = document.createElement("input");
+          filterCheckbox.type = "checkbox";
+          filterCheckbox.id = filterId;
+
+          filterGroup.appendChild(filterLabel);
+          filterGroup.appendChild(filterCheckbox);
+          filtersContainer.appendChild(filterGroup);
+
+          // Adiciona event listener para atualizar os filtros
+          filterCheckbox.addEventListener("change", () => {
+            filters[column] = filterCheckbox.checked ? "1" : "all";
+            updateFilters();
+            renderBalls();
+          });
+        }
 
         // Inicializa o filtro com valor "all"
         filters[column] = "all";
@@ -137,32 +155,6 @@ function renderBalls() {
     ball.className = "ball";
     ball.textContent = q.COD;
     ball.setAttribute("data-question", q.QUESTAO);
-
-    ball.addEventListener('mousemove', (event) => {
-      const tooltip = ball.querySelector('.tooltip') || document.createElement('div');
-      tooltip.className = 'tooltip';
-      tooltip.textContent = ball.getAttribute('data-question');
-
-      if (!ball.contains(tooltip)) {
-        ball.appendChild(tooltip);
-      }
-
-      // Obtém a posição da bolinha na tela
-      const ballRect = ball.getBoundingClientRect();
-
-      // Posiciona o tooltip abaixo da bolinha
-      tooltip.style.position = 'fixed';
-      tooltip.style.left = `${ballRect.left + window.scrollX + (ball.offsetWidth / 2)}px`;
-      tooltip.style.top = `${ballRect.bottom + window.scrollY}px`;
-      tooltip.style.transform = 'translateX(-50%)'; // Centraliza o tooltip
-    });
-
-    ball.addEventListener('mouseleave', () => {
-      const tooltip = ball.querySelector('.tooltip');
-      if (tooltip) {
-        tooltip.remove();
-      }
-    });
 
     // Verifica se a bola deve ficar ativa ou inativa
     const isActive = Object.keys(filters).every(key => {
