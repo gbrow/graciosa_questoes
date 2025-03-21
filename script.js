@@ -1,173 +1,103 @@
-const filtersContainer = document.getElementById("filters");
-const ballsContainer = document.getElementById("balls-container");
+document.addEventListener('DOMContentLoaded', async () => {
+  const filtrosColuna = document.getElementById('filtros-coluna');
+  const perguntasColuna = document.getElementById('perguntas-coluna');
 
-let questions = [];
-let filters = {};
-let config = {}; // Armazenará o mapeamento do JSON
+  // Carrega os dados dos arquivos
+  const [perguntasCsv, config] = await Promise.all([
+    fetch('perguntas.csv').then(response => response.text()),
+    fetch('config.json').then(response => response.json())
+  ]);
 
-// Função para carregar o JSON de configuração
-async function loadConfig() {
-  try {
-    const response = await fetch("config.json");
-    config = await response.json();
-    loadCSV(); // Carrega o CSV após carregar o JSON
-  } catch (err) {
-    console.error("Erro ao carregar o arquivo de configuração:", err);
-  }
-}
+  // Converte o CSV para um array de objetos
+  const perguntasArray = csvToArray(perguntasCsv);
 
-// Função para carregar o CSV
-function loadCSV() {
-  Papa.parse("perguntas.csv", {
-    download: true,
-    header: true,
-    delimiter: ";",
-    encoding: "UTF-8",
-    complete: function (results) {
-      questions = results.data;
-      createFilters(results.meta.fields); // Cria os filtros com base nas colunas
-      renderBalls();
-    },
-    error: function (err) {
-      console.error("Erro ao carregar o CSV:", err);
-    },
-  });
-}
-
-// Função para criar os filtros dinamicamente
-function createFilters(columns) {
-  filtersContainer.innerHTML = ""; // Limpa os filtros existentes
-
-  columns.forEach(column => {
-    if (column !== "COD" && column !== "QUESTAO") { // Ignora colunas específicas
-      // Verifica se o filtro está habilitado no JSON
-      if (config[column]?.enabled) {
-        const filterId = `${column.toLowerCase()}-filter`;
-
-        const filterGroup = document.createElement("div");
-        filterGroup.className = "filter-group";
-
-        const filterLabel = document.createElement("label");
-        filterLabel.setAttribute("for", filterId);
-
-        // Usa o mapeamento do JSON para o rótulo
-        const labelText = config[column]?.label || column;
-        filterLabel.textContent = labelText;
-
-        // Adiciona o ícone de tooltip
-        if (config[column]?.description) {
-          const tooltipIcon = document.createElement("span");
-          tooltipIcon.className = "tooltip-icon";
-          tooltipIcon.setAttribute("data-tooltip", config[column].description);
-          tooltipIcon.textContent = "ⓘ"; // Ícone de informação
-          filterLabel.appendChild(tooltipIcon);
-        }
-
-        // Cria o filtro com base no tipo especificado no JSON
-        if (config[column].type === "list") {
-          const filterSelect = document.createElement("select");
-          filterSelect.id = filterId;
-          filterSelect.innerHTML = '<option value="all">Todos</option>';
-
-          filterGroup.appendChild(filterLabel);
-          filterGroup.appendChild(filterSelect);
-          filtersContainer.appendChild(filterGroup);
-
-          // Adiciona event listener para atualizar os filtros
-          filterSelect.addEventListener("change", () => {
-            filters[column] = filterSelect.value;
-            updateFilters();
-            renderBalls();
-          });
-        } else if (config[column].type === "checkbox") {
-          const filterCheckbox = document.createElement("input");
-          filterCheckbox.type = "checkbox";
-          filterCheckbox.id = filterId;
-
-          filterGroup.appendChild(filterLabel);
-          filterGroup.appendChild(filterCheckbox);
-          filtersContainer.appendChild(filterGroup);
-
-          // Adiciona event listener para atualizar os filtros
-          filterCheckbox.addEventListener("change", () => {
-            filters[column] = filterCheckbox.checked ? "1" : "all";
-            updateFilters();
-            renderBalls();
-          });
-        }
-
-        // Inicializa o filtro com valor "all"
-        filters[column] = "all";
-      }
+  // Gera os filtros com base nas colunas da tabela e no config.json
+  const colunas = Object.keys(perguntasArray[0]); // Pega as colunas da tabela
+  config.filtros.forEach(filtroConfig => {
+    if (filtroConfig.enabled && colunas.includes(filtroConfig.coluna)) {
+      const filtroDiv = document.createElement('div');
+      filtroDiv.className = 'filtro';
+      filtroDiv.innerHTML = `
+        <label>${filtroConfig.label}</label>
+        ${filtroConfig.type === 'checkbox' ? gerarCheckboxes(filtroConfig, perguntasArray) : gerarLista(filtroConfig, perguntasArray)}
+        <span class="info-icon" title="${filtroConfig.description}">ℹ️</span>
+      `;
+      filtrosColuna.appendChild(filtroDiv);
     }
   });
 
-  updateFilterOptions(); // Atualiza as opções dos filtros
-}
-
-// Função para atualizar as opções dos filtros com base nas seleções
-function updateFilters() {
-  const filteredQuestions = questions.filter(q => {
-    return Object.keys(filters).every(key => {
-      return filters[key] === "all" || q[key] === filters[key];
-    });
+  // Gera as bolinhas das perguntas
+  perguntasArray.forEach(pergunta => {
+    const bolinha = document.createElement('div');
+    bolinha.className = 'pergunta-bolinha';
+    bolinha.dataset.tooltip = pergunta.QUESTAO; // Tooltip com a pergunta
+    bolinha.textContent = pergunta.COD; // Código dentro da bolinha
+    perguntasColuna.appendChild(bolinha);
   });
 
-  updateFilterOptions(filteredQuestions);
+  // Adiciona listeners para os filtros
+  document.querySelectorAll('.filtro input, .filtro select').forEach(elemento => {
+    elemento.addEventListener('change', () => filtrarPerguntas(perguntasArray));
+  });
+});
+
+function csvToArray(csv) {
+  const linhas = csv.split('\n');
+  const headers = linhas[0].split(',').map(header => header.trim());
+  return linhas.slice(1).map(linha => {
+    const valores = linha.split(',');
+    return headers.reduce((obj, header, index) => {
+      obj[header] = valores[index].trim();
+      return obj;
+    }, {});
+  });
 }
 
-// Função para atualizar as opções de cada filtro
-function updateFilterOptions(filteredQuestions = questions) {
-  const filterSelects = filtersContainer.querySelectorAll("select");
+function gerarCheckboxes(filtroConfig, perguntas) {
+  const opcoes = [...new Set(perguntas.map(p => p[filtroConfig.coluna]))];
+  return opcoes.map(opcao => `
+    <div>
+      <input type="checkbox" id="${opcao}" name="${filtroConfig.coluna}" value="${opcao}">
+      <label for="${opcao}">${opcao}</label>
+    </div>
+  `).join('');
+}
 
-  filterSelects.forEach(filterSelect => {
-    const column = filterSelect.id.replace("-filter", "").toUpperCase();
-    const currentValue = filterSelect.value;
+function gerarLista(filtroConfig, perguntas) {
+  const opcoes = [...new Set(perguntas.map(p => p[filtroConfig.coluna]))];
+  return `
+    <select id="${filtroConfig.coluna}">
+      <option value="">Todos</option>
+      ${opcoes.map(opcao => `<option value="${opcao}">${opcao}</option>`).join('')}
+    </select>
+  `;
+}
 
-    const uniqueValues = [...new Set(filteredQuestions.map(q => q[column]))];
-    filterSelect.innerHTML = '<option value="all">Todos</option>';
-
-    uniqueValues.forEach(value => {
-      if (value) {
-        const optionElement = document.createElement("option");
-        optionElement.value = value;
-        optionElement.textContent = value;
-        filterSelect.appendChild(optionElement);
-      }
-    });
-
-    // Mantém a seleção atual, se ainda estiver disponível
-    if (uniqueValues.includes(currentValue)) {
-      filterSelect.value = currentValue;
-    } else {
-      filterSelect.value = "all";
-      filters[column] = "all";
+function filtrarPerguntas(perguntas) {
+  const filtrosAtivos = {};
+  document.querySelectorAll('.filtro input:checked, .filtro select').forEach(elemento => {
+    const coluna = elemento.name || elemento.id;
+    const valor = elemento.value;
+    if (valor) {
+      if (!filtrosAtivos[coluna]) filtrosAtivos[coluna] = [];
+      filtrosAtivos[coluna].push(valor);
     }
   });
-}
 
-// Função para renderizar as bolas
-function renderBalls() {
-  ballsContainer.innerHTML = "";
-
-  questions.forEach(q => {
-    const ball = document.createElement("div");
-    ball.className = "ball";
-    ball.textContent = q.COD;
-    ball.setAttribute("data-question", q.QUESTAO);
-
-    // Verifica se a bola deve ficar ativa ou inativa
-    const isActive = Object.keys(filters).every(key => {
-      return filters[key] === "all" || q[key] === filters[key];
+  const perguntasFiltradas = perguntas.filter(pergunta => {
+    return Object.keys(filtrosAtivos).every(coluna => {
+      return filtrosAtivos[coluna].includes(pergunta[coluna]);
     });
+  });
 
-    if (!isActive) {
-      ball.classList.add("inactive");
-    }
-
-    ballsContainer.appendChild(ball);
+  // Atualiza as bolinhas
+  const perguntasColuna = document.getElementById('perguntas-coluna');
+  perguntasColuna.innerHTML = ''; // Limpa as bolinhas atuais
+  perguntasFiltradas.forEach(pergunta => {
+    const bolinha = document.createElement('div');
+    bolinha.className = 'pergunta-bolinha';
+    bolinha.dataset.tooltip = pergunta.QUESTAO;
+    bolinha.textContent = pergunta.COD;
+    perguntasColuna.appendChild(bolinha);
   });
 }
-
-// Carrega o JSON de configuração ao iniciar
-loadConfig();
