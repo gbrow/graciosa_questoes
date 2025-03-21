@@ -7,14 +7,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     fetch('perguntas.csv').then(response => response.text()),
     fetch('config.json').then(response => response.json())
   ]);
-
+  console.log["filtros: ", config];
   // Converte o CSV para um array de objetos
   const perguntasArray = csvToArray(perguntasCsv);
-  console.log("perguntas array: ",perguntasCsv);
 
   // Gera os filtros com base nas colunas da tabela e no config.json
+  
   const colunas = Object.keys(perguntasArray[0]); // Pega as colunas da tabela
+  console.log("colunas: ", colunas);
   config.filtros.forEach(filtroConfig => {
+    console.log("filtro: ", filtroConfig)
     if (filtroConfig.enabled && colunas.includes(filtroConfig.coluna)) {
       const filtroDiv = document.createElement('div');
       filtroDiv.className = 'filtro';
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Gera as bolinhas das perguntas
   perguntasArray.forEach(pergunta => {
+    console.log("pergunta: ", pergunta)
     const bolinha = document.createElement('div');
     bolinha.className = 'pergunta-bolinha';
     bolinha.dataset.tooltip = pergunta.QUESTAO; // Tooltip com a pergunta
