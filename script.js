@@ -3,23 +3,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   const perguntasColuna = document.getElementById('perguntas-coluna');
 
   // Carrega os dados dos arquivos
-  const [perguntas, config] = await Promise.all([
+  const [perguntasCsv, config] = await Promise.all([
     fetch('perguntas.csv').then(response => response.text()),
     fetch('config.json').then(response => response.json())
   ]);
 
   // Converte o CSV para um array de objetos
-  const perguntasArray = csvToArray(perguntas);
+  const perguntasArray = csvToArray(perguntasCsv);
 
-  // Gera os filtros
-  config.filtros.forEach(filtro => {
-    if (filtro.enabled) {
+  // Gera os filtros com base nas colunas da tabela e no config.json
+  const colunas = Object.keys(perguntasArray[0]); // Pega as colunas da tabela
+  config.filtros.forEach(filtroConfig => {
+    if (filtroConfig.enabled && colunas.includes(filtroConfig.coluna)) {
       const filtroDiv = document.createElement('div');
       filtroDiv.className = 'filtro';
       filtroDiv.innerHTML = `
-        <label>${filtro.label}</label>
-        ${filtro.type === 'checkbox' ? gerarCheckboxes(filtro, perguntasArray) : gerarLista(filtro, perguntasArray)}
-        <span class="info-icon" title="${filtro.description}">ℹ️</span>
+        <label>${filtroConfig.label}</label>
+        ${filtroConfig.type === 'checkbox' ? gerarCheckboxes(filtroConfig, perguntasArray) : gerarLista(filtroConfig, perguntasArray)}
+        <span class="info-icon" title="${filtroConfig.description}">ℹ️</span>
       `;
       filtrosColuna.appendChild(filtroDiv);
     }
@@ -29,38 +30,74 @@ document.addEventListener('DOMContentLoaded', async () => {
   perguntasArray.forEach(pergunta => {
     const bolinha = document.createElement('div');
     bolinha.className = 'pergunta-bolinha';
-    bolinha.dataset.tooltip = pergunta.QUESTAO;
+    bolinha.dataset.tooltip = pergunta.QUESTAO; // Tooltip com a pergunta
+    bolinha.textContent = pergunta.COD; // Código dentro da bolinha
     perguntasColuna.appendChild(bolinha);
+  });
+
+  // Adiciona listeners para os filtros
+  document.querySelectorAll('.filtro input, .filtro select').forEach(elemento => {
+    elemento.addEventListener('change', () => filtrarPerguntas(perguntasArray));
   });
 });
 
 function csvToArray(csv) {
   const linhas = csv.split('\n');
-  const headers = linhas[0].split(',');
+  const headers = linhas[0].split(',').map(header => header.trim());
   return linhas.slice(1).map(linha => {
     const valores = linha.split(',');
     return headers.reduce((obj, header, index) => {
-      obj[header.trim()] = valores[index].trim();
+      obj[header] = valores[index].trim();
       return obj;
     }, {});
   });
 }
 
-function gerarCheckboxes(filtro, perguntas) {
-  const opcoes = [...new Set(perguntas.map(p => p[filtro.coluna]))];
+function gerarCheckboxes(filtroConfig, perguntas) {
+  const opcoes = [...new Set(perguntas.map(p => p[filtroConfig.coluna]))];
   return opcoes.map(opcao => `
     <div>
-      <input type="checkbox" id="${opcao}" name="${filtro.coluna}" value="${opcao}">
+      <input type="checkbox" id="${opcao}" name="${filtroConfig.coluna}" value="${opcao}">
       <label for="${opcao}">${opcao}</label>
     </div>
   `).join('');
 }
 
-function gerarLista(filtro, perguntas) {
-  const opcoes = [...new Set(perguntas.map(p => p[filtro.coluna]))];
+function gerarLista(filtroConfig, perguntas) {
+  const opcoes = [...new Set(perguntas.map(p => p[filtroConfig.coluna]))];
   return `
-    <select id="${filtro.coluna}">
+    <select id="${filtroConfig.coluna}">
+      <option value="">Todos</option>
       ${opcoes.map(opcao => `<option value="${opcao}">${opcao}</option>`).join('')}
     </select>
   `;
+}
+
+function filtrarPerguntas(perguntas) {
+  const filtrosAtivos = {};
+  document.querySelectorAll('.filtro input:checked, .filtro select').forEach(elemento => {
+    const coluna = elemento.name || elemento.id;
+    const valor = elemento.value;
+    if (valor) {
+      if (!filtrosAtivos[coluna]) filtrosAtivos[coluna] = [];
+      filtrosAtivos[coluna].push(valor);
+    }
+  });
+
+  const perguntasFiltradas = perguntas.filter(pergunta => {
+    return Object.keys(filtrosAtivos).every(coluna => {
+      return filtrosAtivos[coluna].includes(pergunta[coluna]);
+    });
+  });
+
+  // Atualiza as bolinhas
+  const perguntasColuna = document.getElementById('perguntas-coluna');
+  perguntasColuna.innerHTML = ''; // Limpa as bolinhas atuais
+  perguntasFiltradas.forEach(pergunta => {
+    const bolinha = document.createElement('div');
+    bolinha.className = 'pergunta-bolinha';
+    bolinha.dataset.tooltip = pergunta.QUESTAO;
+    bolinha.textContent = pergunta.COD;
+    perguntasColuna.appendChild(bolinha);
+  });
 }
