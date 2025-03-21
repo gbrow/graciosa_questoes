@@ -1,122 +1,144 @@
 {
-  "TEMA": {
+  "filtros":[
+  {
+    "coluna":"TEMA", 
     "label": "Grupo",
     "description": "Filtre as perguntas por grupo temático.",
     "enabled": true,
     "type": "list"
   },
-  "SUBTEMA": {
+  {
+    "coluna":"SUBTEMA",
     "label": "Tema",
     "description": "Filtre as perguntas por subtema.",
     "enabled": true,
     "type": "list"
   },
-  "ORIGEM": {
+  {
+    "coluna":"ORIGEM",
     "label": "Origem",
     "description": "Filtre as perguntas por origem (quem fez a pergunta).",
     "enabled": true,
     "type": "list"
   },
-  "FACILIDADE_DE_RESPOSTA": {
+  {
+    "coluna":"FACILIDADE_DE_RESPOSTA",
     "label": "Facilidade de Resposta",
     "description": "Filtre as perguntas pela facilidade de resposta.",
     "enabled": true,
     "type": "list"
   },
-  "NECESSIDADE_DE_EQUIPAMENTO": {
+  {
+    "coluna":"NECESSIDADE_DE_EQUIPAMENTO",
     "label": "Necessidade de Equipamento",
     "description": "Filtre as perguntas pela necessidade de equipamento.",
     "enabled": true,
     "type": "list"
   },
-  "TEMPO_PARA_RESPOSTA": {
+  {
+    "coluna":"TEMPO_PARA_RESPOSTA",
     "label": "Tempo para Resposta",
     "description": "Filtre as perguntas pela necessidade de tempo para darmos a resposta.",
     "enabled": true,
     "type": "list"
   },
-  "VAMOS_RESPONDER": {
+  {
+    "coluna":"VAMOS_RESPONDER",
     "label": "Vamos Responder?",
     "description": "Filtre as perguntas pela certeza que vamos responder ou não.",
     "enabled": false,
     "type": "list"
   },
-  "OBS": {
+  {
+    "coluna":"OBS",
     "label": "Observação",
     "description": "Filtre as perguntas pela observação.",
     "enabled": false,
     "type": "list"
   },
-  "PROCEDIMENTOS_METODOLOGICOS": {
+  {
+    "coluna":"PROCEDIMENTOS_METODOLOGICOS",
     "label": "Procedimentos Metodológicos",
     "description": "Filtre as perguntas pelo Procedimento Metodológico.",
     "enabled": true,
     "type": "list"
   },
-  "PROCEDIMENTO_METODOLOGICO_INDICADO": {
+  {
+    "coluna":"PROCEDIMENTO_METODOLOGICO_INDICADO",
     "label": "Descrição do Procedimentos Metodológicos",
     "description": "Filtre as perguntas pela descrição Procedimento Metodológico.",
     "enabled": false,
     "type": "list"
   },
-  "G1": {
+  {
+    "coluna":"G1",
     "label": "Legislação e Regularização Fundiária",
     "description": "Perguntas relacionadas à aplicação de leis, regularização fundiária, zoneamento e conformidade com normas ambientais e urbanísticas.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G2": {
+  {
+    "coluna":"G2",
     "label": "Áreas de Preservação Permanente (APPs) e Áreas de Proteção Ambiental (APA)",
     "description": "Perguntas sobre a identificação, delimitação, degradação e recuperação de APPs e APAs, incluindo nascentes, cursos d'água e vegetação.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G3": {
+  {
+    "coluna":"G3",
     "label": "Degradação Ambiental e Recuperação",
     "description": "Perguntas sobre a degradação ambiental, impactos negativos, danos causados, e possíveis medidas de recuperação e mitigação.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G4": {
+  {
+    "coluna":"G4",
     "label": "Infraestrutura e Serviços Públicos",
     "description": "Perguntas sobre a infraestrutura existente na comunidade, como saneamento básico, energia elétrica, coleta de resíduos, e acesso a serviços públicos.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G5": {
+  {
+    "coluna":"G5",
     "label": "Aspectos Sociais e Econômicos",
     "description": "Perguntas sobre a geração de renda, ocupação do solo, condições de vida da comunidade, e impactos sociais da possível desocupação.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G6": {
+  {
+    "coluna":"G6",
     "label": "Vegetação e Biodiversidade",
     "description": "Perguntas sobre a cobertura vegetal, espécies nativas, fauna, flora, e impactos da ocupação humana na biodiversidade.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G7": {
+  {
+    "coluna":"G7",
     "label": "Metodologias de Investigação e Análise",
     "description": "Perguntas sobre as metodologias a serem utilizadas na perícia, incluindo técnicas de sensoriamento remoto, geoprocessamento, levantamento de campo, e análise de dados.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G8": {
+  {
+    "coluna":"G8",
     "label": "Impactos Antrópicos e Riscos Ambientais",
     "description": "Perguntas sobre os impactos causados pela ocupação humana, riscos ambientais, e medidas de mitigação.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G9": {
+  {
+    "coluna":"G9",
     "label": "Serviços Ecossistêmicos",
     "description": "Perguntas sobre os serviços ecossistêmicos prestados pela área, como regulação climática, controle de erosão, e provisão de água.",
     "enabled": true,
     "type": "checkbox"
   },
-  "G10": {
+  {
+    "coluna":"G10",
     "label": "Documentação e Relatórios Técnicos",
     "description": "Perguntas sobre a documentação, mapas, relatórios fotográficos, e apresentação dos resultados da perícia.",
     "enabled": true,
     "type": "checkbox"
   }
+]
 }

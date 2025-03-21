@@ -1,156 +1,54 @@
-/* Reset básico */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f9;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #007bff;
-}
-
-/* Layout de duas colunas */
-.main-content {
   display: flex;
-  gap: 20px;
+  width: 80%;
+  max-width: 1200px;
 }
 
-.filters-column {
-  flex: 1;
-  max-width: 300px;
-  background-color: #fff;
+.filtros-coluna {
+  width: 30%;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-right: 1px solid #ddd;
 }
 
-.balls-column {
-  flex: 2;
-}
-
-/* Estilo dos filtros */
-.filter-group {
-  margin-bottom: 20px;
-}
-
-.filter-group label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #555;
-}
-
-.filter-group select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  background-color: #f9f9f9;
-  cursor: pointer;
-}
-
-.filter-group select:hover {
-  border-color: #007bff;
-}
-
-/* Layout das bolinhas */
-.balls-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+.perguntas-coluna {
+  width: 70%;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  justify-content: center;
 }
 
-.ball {
-  width: 50px;
-  height: 50px;
+.pergunta-bolinha {
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: #007bff;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  transition: opacity 0.3s ease, transform 0.2s ease;
-}
-
-.ball:hover {
-  /*transform: scale(1.1);*/
-  background-color: #333;
-}
-
-.ball.inactive {
-  opacity: 0.3;
-  pointer-events: none;
-}
-
-/* Tooltip ajustado */
-.ball:hover::after {
-  content: attr(data-question);
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  /*transform: translateX(-50%);*/
-  background-color: #333;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  white-space: normal;
-  max-width: 300px;
-  width: max-content;
-  z-index: 1000; /* Garante que o tooltip fique na frente */
-  word-wrap: break-word;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Ajuste para tooltips nas bordas */
-.ball:hover::after {
-  left: 50%;
-  transform: translateX(-50%);
-  margin-left: 0;
-}
-
-
-  /* Estilo do ícone de tooltip */
-.tooltip-icon {
-  margin-left: 5px;
-  cursor: pointer;
-  color: #007bff;
-  font-size: 0.9rem;
-}
-
-.tooltip-icon:hover::after {
-  content: attr(data-tooltip);
   position: relative;
-  top: 20px;
+}
+
+.pergunta-bolinha:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
-  color: white;
-  padding: 8px;
-  max-width: 300px;
-  width: max-content;
+  color: #fff;
+  padding: 5px;
   border-radius: 4px;
-  white-space: normal;
-  word-wrap: break-word;
-  font-size: 0.8rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  font-size: 12px;
 }
