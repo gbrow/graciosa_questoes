@@ -5,70 +5,70 @@
     "label": "Grupo",
     "description": "Filtre as perguntas por grupo temático.",
     "enabled": true,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"SUBTEMA",
     "label": "Tema",
     "description": "Filtre as perguntas por subtema.",
     "enabled": true,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"ORIGEM",
     "label": "Origem",
     "description": "Filtre as perguntas por origem (quem fez a pergunta).",
     "enabled": true,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"FACILIDADE_DE_RESPOSTA",
     "label": "Facilidade de Resposta",
     "description": "Filtre as perguntas pela facilidade de resposta.",
     "enabled": true,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"NECESSIDADE_DE_EQUIPAMENTO",
     "label": "Necessidade de Equipamento",
     "description": "Filtre as perguntas pela necessidade de equipamento.",
     "enabled": true,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"TEMPO_PARA_RESPOSTA",
     "label": "Tempo para Resposta",
     "description": "Filtre as perguntas pela necessidade de tempo para darmos a resposta.",
     "enabled": true,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"VAMOS_RESPONDER",
     "label": "Vamos Responder?",
     "description": "Filtre as perguntas pela certeza que vamos responder ou não.",
     "enabled": false,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"OBS",
     "label": "Observação",
     "description": "Filtre as perguntas pela observação.",
     "enabled": false,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"PROCEDIMENTOS_METODOLOGICOS",
     "label": "Procedimentos Metodológicos",
     "description": "Filtre as perguntas pelo Procedimento Metodológico.",
     "enabled": true,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"PROCEDIMENTO_METODOLOGICO_INDICADO",
     "label": "Descrição do Procedimentos Metodológicos",
     "description": "Filtre as perguntas pela descrição Procedimento Metodológico.",
     "enabled": false,
-    "type": "list"
+    "type": "checkbox-multi"
   },
   {
     "coluna":"G1",
