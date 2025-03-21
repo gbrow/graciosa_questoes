@@ -103,7 +103,7 @@ h1 {
 /* Tooltip ajustado */
 .ball:hover::after {
   content: attr(data-question);
-  position: fixed;
+  position: absolute;
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
@@ -134,7 +134,6 @@ h1 {
   cursor: pointer;
   color: #007bff;
   font-size: 0.9rem;
-  position: relative;
 }
 
 .tooltip-icon:hover::after {
