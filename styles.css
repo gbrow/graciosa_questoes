@@ -92,7 +92,8 @@ h1 {
 }
 
 .ball:hover {
-  transform: scale(1.1);
+  /*transform: scale(1.1);*/
+  background-color: #333;
 }
 
 .ball.inactive {
@@ -106,7 +107,7 @@ h1 {
   position: absolute;
   top: 60px;
   left: 50%;
-  transform: translateX(-50%);
+  /*transform: translateX(-50%);*/
   background-color: #333;
   color: white;
   padding: 10px;
@@ -138,7 +139,7 @@ h1 {
 
 .tooltip-icon:hover::after {
   content: attr(data-tooltip);
-  position: absolute;
+  position: relative;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
