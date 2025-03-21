@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Converte o CSV para um array de objetos
   const perguntasArray = csvToArray(perguntasCsv);
+  console.log("perguntas array: ",perguntasArray);
 
   // Gera os filtros com base nas colunas da tabela e no config.json
   const colunas = Object.keys(perguntasArray[0]); // Pega as colunas da tabela
