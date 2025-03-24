@@ -1,122 +1,124 @@
 {
-  "TEMA": {
+  "filtros": [
+  {
+    "id":"TEMA",
     "label": "Grupo",
     "description": "Filtre as perguntas por grupo temático.",
-    "enabled": true,
-    "type": "list"
+    "enabled": true
   },
-  "SUBTEMA": {
+  {
+    "id":"SUBTEMA",
     "label": "Tema",
     "description": "Filtre as perguntas por subtema.",
-    "enabled": true,
-    "type": "list"
+    "enabled": true
   },
-  "ORIGEM": {
+  {
+    "id":"ORIGEM",
     "label": "Origem",
     "description": "Filtre as perguntas por origem (quem fez a pergunta).",
-    "enabled": true,
-    "type": "list"
+    "enabled": true
   },
-  "FACILIDADE_DE_RESPOSTA": {
+  {
+    "id":"FACILIDADE_DE_RESPOSTA",
     "label": "Facilidade de Resposta",
     "description": "Filtre as perguntas pela facilidade de resposta.",
-    "enabled": true,
-    "type": "list"
+    "enabled": true
   },
-  "NECESSIDADE_DE_EQUIPAMENTO": {
+  {
+    "id":"NECESSIDADE_DE_EQUIPAMENTO",
     "label": "Necessidade de Equipamento",
     "description": "Filtre as perguntas pela necessidade de equipamento.",
-    "enabled": true,
-    "type": "list"
+    "enabled": true
   },
-  "TEMPO_PARA_RESPOSTA": {
+  {
+    "id":"TEMPO_PARA_RESPOSTA",
     "label": "Tempo para Resposta",
     "description": "Filtre as perguntas pela necessidade de tempo para darmos a resposta.",
-    "enabled": true,
-    "type": "list"
+    "enabled": true
   },
-  "VAMOS_RESPONDER": {
+  {
+    "id":"VAMOS_RESPONDER",
     "label": "Vamos Responder?",
     "description": "Filtre as perguntas pela certeza que vamos responder ou não.",
-    "enabled": false,
-    "type": "list"
+    "enabled": false
   },
-  "OBS": {
+  {
+    "id":"OBS",
     "label": "Observação",
     "description": "Filtre as perguntas pela observação.",
-    "enabled": false,
-    "type": "list"
+    "enabled": false
   },
-  "PROCEDIMENTOS_METODOLOGICOS": {
+  {
+    "id":"PROCEDIMENTOS_METODOLOGICOS",
     "label": "Procedimentos Metodológicos",
     "description": "Filtre as perguntas pelo Procedimento Metodológico.",
-    "enabled": true,
-    "type": "list"
+    "enabled": true
   },
-  "PROCEDIMENTO_METODOLOGICO_INDICADO": {
+  {
+    "id":"PROCEDIMENTO_METODOLOGICO_INDICADO",
     "label": "Descrição do Procedimentos Metodológicos",
     "description": "Filtre as perguntas pela descrição Procedimento Metodológico.",
-    "enabled": false,
-    "type": "list"
+    "enabled": false
   },
-  "G1": {
+  {
+    "id":"Legislação e Regularização Fundiária",
     "label": "Legislação e Regularização Fundiária",
     "description": "Perguntas relacionadas à aplicação de leis, regularização fundiária, zoneamento e conformidade com normas ambientais e urbanísticas.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G2": {
+  {
+    "id":"Áreas de Preservação Permanente (APPs) e Áreas de Proteção Ambiental (APA)",
     "label": "Áreas de Preservação Permanente (APPs) e Áreas de Proteção Ambiental (APA)",
     "description": "Perguntas sobre a identificação, delimitação, degradação e recuperação de APPs e APAs, incluindo nascentes, cursos d'água e vegetação.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G3": {
+  {
+    "id":"Degradação Ambiental e Recuperação",
     "label": "Degradação Ambiental e Recuperação",
     "description": "Perguntas sobre a degradação ambiental, impactos negativos, danos causados, e possíveis medidas de recuperação e mitigação.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G4": {
+  {
+    "id":"Infraestrutura e Serviços Públicos",
     "label": "Infraestrutura e Serviços Públicos",
     "description": "Perguntas sobre a infraestrutura existente na comunidade, como saneamento básico, energia elétrica, coleta de resíduos, e acesso a serviços públicos.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G5": {
+  {
+    "id":"Aspectos Sociais e Econômicos",
     "label": "Aspectos Sociais e Econômicos",
     "description": "Perguntas sobre a geração de renda, ocupação do solo, condições de vida da comunidade, e impactos sociais da possível desocupação.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G6": {
+  {
+    "id":"Vegetação e Biodiversidade",
     "label": "Vegetação e Biodiversidade",
     "description": "Perguntas sobre a cobertura vegetal, espécies nativas, fauna, flora, e impactos da ocupação humana na biodiversidade.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G7": {
+  {
+    "id":"Metodologias de Investigação e Análise",
     "label": "Metodologias de Investigação e Análise",
     "description": "Perguntas sobre as metodologias a serem utilizadas na perícia, incluindo técnicas de sensoriamento remoto, geoprocessamento, levantamento de campo, e análise de dados.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G8": {
+  {
+    "id":"Impactos Antrópicos e Riscos Ambientais",
     "label": "Impactos Antrópicos e Riscos Ambientais",
     "description": "Perguntas sobre os impactos causados pela ocupação humana, riscos ambientais, e medidas de mitigação.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G9": {
+  {
+    "id":"Serviços Ecossistêmicos",
     "label": "Serviços Ecossistêmicos",
     "description": "Perguntas sobre os serviços ecossistêmicos prestados pela área, como regulação climática, controle de erosão, e provisão de água.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   },
-  "G10": {
+  {
+    "id":"Documentação e Relatórios Técnicos",
     "label": "Documentação e Relatórios Técnicos",
     "description": "Perguntas sobre a documentação, mapas, relatórios fotográficos, e apresentação dos resultados da perícia.",
-    "enabled": true,
-    "type": "checkbox"
+    "enabled": true
   }
+]
 }

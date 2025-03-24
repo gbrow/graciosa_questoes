@@ -17,14 +17,13 @@ async function main() {
     console.log("Dados Combinados:", dadosCombinados);
 
     // Criar interface
-    criarFiltrosValoresUnicos(perguntas2); // Filtros baseados em valores únicos (perguntas2.csv)
-    criarFiltrosBooleanos(perguntas3); // Filtros booleanos (perguntas3.csv)
+    criarFiltros(config, perguntas3);
     atualizarBolinhas(dadosCombinados, []);
     atualizarPerguntasFiltradas(dadosCombinados, []);
 
     // Eventos de filtro
     document.getElementById("filtros").addEventListener("click", (event) => {
-      if (event.target.tagName === "BUTTON" && !event.target.classList.contains("desabilitado")) {
+      if (event.target.tagName === "BUTTON") {
         const filtro = event.target.dataset.filtro;
         const valor = event.target.dataset.valor;
 
@@ -39,7 +38,7 @@ async function main() {
         atualizarPerguntasFiltradas(dadosCombinados, filtrosAtivos);
 
         // Atualizar contagem nos filtros
-        atualizarContagemFiltros(dadosCombinados, filtrosAtivos);
+        atualizarContagemFiltros(perguntas3, filtrosAtivos);
       }
     });
   } catch (error) {
@@ -47,56 +46,15 @@ async function main() {
   }
 }
 
-// Combinar dados dos três arquivos CSV
 function combinarDados(perguntas, perguntas2, perguntas3) {
-  return perguntas.map((pergunta, index) => {
-    const pergunta2 = perguntas2[index] || {}; // Evitar erro se não houver correspondência
-    const pergunta3 = perguntas3[index] || {}; // Evitar erro se não houver correspondência
-    return {
-      ...pergunta,
-      ...pergunta2,
-      ...pergunta3
-    };
-  });
+  return perguntas.map((pergunta, index) => ({
+    ...pergunta,
+    ...perguntas2[index],
+    ...perguntas3[index]
+  }));
 }
 
-// Criar filtros baseados em valores únicos (perguntas2.csv)
-function criarFiltrosValoresUnicos(perguntas2) {
-  const filtrosContainer = document.getElementById("filtros");
-
-  if (!perguntas2 || !Array.isArray(perguntas2)) {
-    console.error("perguntas2 não é um array válido:", perguntas2);
-    return;
-  }
-
-  // Criar um grupo de filtros para cada coluna (exceto COD)
-  Object.keys(perguntas2[0]).forEach(coluna => {
-    if (coluna !== "COD") {
-      const filtroDiv = document.createElement("div");
-      filtroDiv.className = "filtro";
-
-      // Título do grupo de filtros
-      const titulo = document.createElement("h3");
-      titulo.textContent = coluna;
-      filtroDiv.appendChild(titulo);
-
-      // Botões para valores únicos
-      const valoresUnicos = obterValoresUnicos(perguntas2, coluna);
-      valoresUnicos.forEach(valor => {
-        const botao = document.createElement("button");
-        botao.textContent = `${valor} (${contarPerguntas(perguntas2, coluna, valor)})`;
-        botao.dataset.filtro = coluna;
-        botao.dataset.valor = valor;
-        filtroDiv.appendChild(botao);
-      });
-
-      filtrosContainer.appendChild(filtroDiv);
-    }
-  });
-}
-
-// Criar filtros booleanos (perguntas3.csv)
-function criarFiltrosBooleanos(perguntas3) {
+function criarFiltros(config, perguntas3) {
   const filtrosContainer = document.getElementById("filtros");
 
   if (!perguntas3 || !Array.isArray(perguntas3)) {
@@ -104,19 +62,27 @@ function criarFiltrosBooleanos(perguntas3) {
     return;
   }
 
-  // Título do grupo de filtros
-  const titulo = document.createElement("h3");
-  titulo.textContent = "Classificação DSK";
-  filtrosContainer.appendChild(titulo);
+  config.filtros.forEach(filtro => {
+    if (filtro.enabled) {
+      const filtroDiv = document.createElement("div");
+      filtroDiv.className = "filtro";
 
-  // Criar um botão para cada coluna booleana (exceto COD)
-  Object.keys(perguntas3[0]).forEach(coluna => {
-    if (coluna !== "COD") {
-      const botao = document.createElement("button");
-      botao.textContent = `${coluna} (${contarPerguntas(perguntas3, coluna, "1")})`;
-      botao.dataset.filtro = coluna;
-      botao.dataset.valor = "1"; // Valor booleano (1)
-      filtrosContainer.appendChild(botao);
+      // Título e descrição do filtro
+      const titulo = document.createElement("h3");
+      titulo.textContent = filtro.label;
+      filtroDiv.appendChild(titulo);
+
+      // Botões para valores únicos
+      const valoresUnicos = obterValoresUnicos(perguntas3, filtro.id);
+      valoresUnicos.forEach(valor => {
+        const botao = document.createElement("button");
+        botao.textContent = `${valor} (${contarPerguntas(perguntas3, filtro.id, valor)})`;
+        botao.dataset.filtro = filtro.id;
+        botao.dataset.valor = valor;
+        filtroDiv.appendChild(botao);
+      });
+
+      filtrosContainer.appendChild(filtroDiv);
     }
   });
 }
@@ -164,15 +130,7 @@ function atualizarBolinhas(dados, filtrosAtivos) {
 }
 
 function passaFiltros(pergunta, filtrosAtivos) {
-  return filtrosAtivos.every(filtro => {
-    if (filtro.valor === "1") {
-      // Filtro booleano (Classificação DSK)
-      return pergunta[filtro.filtro] === "1";
-    } else {
-      // Filtro baseado em valores únicos
-      return pergunta[filtro.filtro] === filtro.valor;
-    }
-  });
+  return filtrosAtivos.every(filtro => pergunta[filtro.filtro] === filtro.valor);
 }
 
 function atualizarPerguntasFiltradas(dados, filtrosAtivos) {
@@ -191,47 +149,22 @@ function atualizarPerguntasFiltradas(dados, filtrosAtivos) {
   });
 }
 
-function atualizarContagemFiltros(dadosCombinados, filtrosAtivos) {
+function atualizarContagemFiltros(perguntas3, filtrosAtivos) {
   const botoesFiltro = document.querySelectorAll("#filtros button");
   botoesFiltro.forEach(botao => {
     const filtro = botao.dataset.filtro;
     const valor = botao.dataset.valor;
 
     // Filtrar perguntas que passam pelos filtros ativos
-    const perguntasFiltradas = dadosCombinados.filter(pergunta =>
-      filtrosAtivos.every(f => {
-        if (f.valor === "1") {
-          // Filtro booleano (Classificação DSK)
-          return pergunta[f.filtro] === "1";
-        } else {
-          // Filtro baseado em valores únicos
-          return pergunta[f.filtro] === f.valor;
-        }
-      })
+    const perguntasFiltradas = perguntas3.filter(pergunta =>
+      filtrosAtivos.every(f => pergunta[f.filtro] === f.valor)
     );
 
     // Contar perguntas que correspondem ao valor do filtro
-    const contagem = perguntasFiltradas.filter(pergunta => {
-      if (valor === "1") {
-        // Filtro booleano (Classificação DSK)
-        return pergunta[filtro] === "1";
-      } else {
-        // Filtro baseado em valores únicos
-        return pergunta[filtro] === valor;
-      }
-    }).length;
+    const contagem = perguntasFiltradas.filter(pergunta => pergunta[filtro] === valor).length;
 
     // Atualizar texto do botão
-    botao.textContent = `${filtro}${valor === "1" ? "" : `: ${valor}`} (${contagem})`;
-
-    // Desabilitar botão se a contagem for 0
-    if (contagem === 0) {
-      botao.classList.add("desabilitado");
-      botao.disabled = true;
-    } else {
-      botao.classList.remove("desabilitado");
-      botao.disabled = false;
-    }
+    botao.textContent = `${valor} (${contagem})`;
   });
 }
 
