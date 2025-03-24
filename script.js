@@ -1,9 +1,9 @@
 async function main() {
   try {
     const [perguntas, perguntas2, perguntas3, config] = await Promise.all([
-      d3.dsv(";", "perguntas.csv"), // Usar ; como delimitador
-      d3.dsv(";", "perguntas2.csv"), // Usar ; como delimitador
-      d3.dsv(";", "perguntas3.csv"), // Usar ; como delimitador
+      d3.dsv(",", "perguntas.csv"), // Usar ; como delimitador
+      d3.dsv(",", "perguntas2.csv"), // Usar ; como delimitador
+      d3.dsv(",", "perguntas3.csv"), // Usar ; como delimitador
       fetch("config.json").then(response => response.json())
     ]);
 
@@ -147,19 +147,44 @@ function atualizarBolinhas(dados, filtrosAtivos) {
   const bolinhasContainer = document.getElementById("bolinhas");
   bolinhasContainer.innerHTML = "";
 
-  dados.forEach((pergunta, index) => {
+  dados.forEach((pergunta) => {
     const bolinha = document.createElement("div");
     bolinha.className = "bolinha";
-    bolinha.textContent = index + 1; // Número da questão
+    bolinha.textContent = pergunta.COD; // Usar COD em vez do índice
+    bolinha.dataset.cod = pergunta.COD; // Armazenar COD para referência
 
     // Verificar se a pergunta passa pelos filtros
     if (passaFiltros(pergunta, filtrosAtivos)) {
       bolinha.classList.add("ativa");
+      
+      // Evento para highlight ao passar o mouse
+      bolinha.addEventListener("mouseover", () => {
+        highlightPergunta(pergunta.COD);
+      });
+      
+      bolinha.addEventListener("mouseout", () => {
+        removeHighlight();
+      });
     } else {
       bolinha.classList.add("inativa");
     }
 
     bolinhasContainer.appendChild(bolinha);
+  });
+}
+
+function highlightPergunta(cod) {
+  const perguntas = document.querySelectorAll('#lista-perguntas li');
+  perguntas.forEach(li => {
+    if (li.dataset.cod === cod) {
+      li.classList.add('destaque');
+    }
+  });
+}
+
+function removeHighlight() {
+  document.querySelectorAll('#lista-perguntas li.destaque').forEach(li => {
+    li.classList.remove('destaque');
   });
 }
 
@@ -180,11 +205,12 @@ function atualizarPerguntasFiltradas(dados, filtrosAtivos) {
   listaPerguntas.innerHTML = "";
 
   const perguntasFiltradas = dados.filter(pergunta => passaFiltros(pergunta, filtrosAtivos));
-  perguntasFiltradas.forEach((pergunta, index) => {
+  perguntasFiltradas.forEach((pergunta) => {
     const li = document.createElement("li");
+    li.dataset.cod = pergunta.COD; // Armazenar COD no elemento li
     const numeroQuestao = document.createElement("span");
     numeroQuestao.className = "numero-questao";
-    numeroQuestao.textContent = `${index + 1}.`;
+    numeroQuestao.textContent = `${pergunta.COD}.`; // Usar COD em vez do índice
     li.appendChild(numeroQuestao);
     li.appendChild(document.createTextNode(` ${pergunta.QUESTAO}`));
     listaPerguntas.appendChild(li);

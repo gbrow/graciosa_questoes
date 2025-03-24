@@ -79,6 +79,19 @@ body {
   pointer-events: none;
 }
 
+/* Estilo para highlight */
+#lista-perguntas li.destaque {
+  background-color: #e6f7ff;
+  border-left: 3px solid #1890ff;
+  padding-left: 7px;
+}
+
+.bolinha.ativa:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
 #perguntas-filtradas {
   width: 60%; /* Largura fixa */
   padding: 10px;
