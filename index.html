@@ -7,6 +7,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Adicione isso no seu <body>, preferencialmente no cabeçalho -->
+<div id="controles">
+  <button id="btn-salvar">Salvar Alterações</button>
+  <span id="contador-edicoes">0 alterações pendentes</span>
+</div>
   <div id="app">
     <div id="filtros"></div>
     <div id="bolinhas"></div>
@@ -15,6 +20,19 @@
       <ul id="lista-perguntas"></ul>
     </div>
   </div>
+
+  <!-- Modal de Edição -->
+  <div id="modal-edicao" class="modal">
+    <div class="modal-conteudo">
+      <span class="fechar-modal">&times;</span>
+      <h2>Editar Questão <span id="modal-cod"></span></h2>
+      <form id="form-edicao">
+        <div id="campos-filtros"></div>
+        <button type="submit">Salvar</button>
+      </form>
+    </div>
+  </div>
+
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="script.js"></script>
 </body>
