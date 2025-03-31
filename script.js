@@ -107,8 +107,13 @@ function criarFiltrosValoresUnicos(perguntas2) {
       titulo.textContent = coluna;
       filtroDiv.appendChild(titulo);
 
+      // Obter todos os valores únicos (incluindo os de campos com múltiplos valores)
+      const todosValores = perguntas2.flatMap(linha => 
+        linha[coluna] ? linha[coluna].split('|').map(v => v.trim()) : []
+      );
+      const valoresUnicos = [...new Set(todosValores)].filter(v => v);
+
       // Botões para valores únicos
-      const valoresUnicos = obterValoresUnicos(perguntas2, coluna);
       valoresUnicos.forEach(valor => {
         const botao = document.createElement("button");
         botao.textContent = `${valor} (${contarPerguntas(perguntas2, coluna, valor)})`;
@@ -149,17 +154,32 @@ function criarFiltrosBooleanos(perguntas3) {
 }
 
 function obterValoresUnicos(dados, coluna) {
-  if (!dados || !Array.isArray(dados) || !coluna) {
-    console.error("Dados ou coluna inválidos:", dados, coluna);
-    return [];
-  }
+  if (!dados || !Array.isArray(dados) || !coluna) return [];
 
-  const valores = dados.map(linha => linha[coluna]).filter((valor, index, self) => self.indexOf(valor) === index);
-  return valores.filter(valor => valor); // Remover valores vazios
+  // Obter todos os valores individuais (separados por |)
+  const todosValores = dados.flatMap(linha => 
+    linha[coluna] ? linha[coluna].split('|').map(v => v.trim()) : []
+  );
+
+  // Filtrar valores vazios e duplicados (case insensitive)
+  const valoresUnicos = [...new Set(todosValores)]
+    .filter(v => v)
+    .sort((a, b) => a.localeCompare(b));
+
+  return valoresUnicos;
 }
 
 function contarPerguntas(dados, coluna, valor) {
-  return dados.filter(linha => linha[coluna] === valor).length;
+  return dados.reduce((count, linha) => {
+    try {
+      if (!linha[coluna]) return count;
+      const valores = linha[coluna].split('|').map(v => v.trim());
+      return valores.includes(valor) ? count + 1 : count;
+    } catch (e) {
+      console.error("Erro ao contar perguntas:", e);
+      return count;
+    }
+  }, 0);
 }
 
 function obterFiltrosAtivos() {
@@ -239,13 +259,22 @@ function abrirModalEdicao(cod) {
             </select>
           `;
         } else {
-          // Campo com valores únicos + opção de adicionar novo
-          const valores = obterValoresUnicos(perguntas2, coluna);
+          // Campo com valores múltiplos
+          const valoresExistentes = obterValoresUnicos(perguntas2, coluna);
+          const valoresAtuais = pergunta[coluna] ? 
+            pergunta[coluna].split('|').map(v => v.trim()) : [];
+
+          valoresAtuais.forEach(valor => {
+            if (!valoresExistentes.includes(valor)) {
+              valoresExistentes.push(valor);
+            }
+          });
+          
           div.innerHTML = `
             <label for="${coluna}">${coluna}</label>
-            <select id="${coluna}" name="${coluna}">
-              ${valores.map(valor => 
-                `<option value="${valor}" ${pergunta[coluna] === valor ? 'selected' : ''}>${valor}</option>`
+            <select id="${coluna}" name="${coluna}" multiple style="height:100px">
+              ${valoresExistentes.map(valor => 
+                `<option value="${valor}" ${valoresAtuais.includes(valor) ? 'selected' : ''}>${valor}</option>`
               ).join('')}
             </select>
             <div class="adicionar-valor">
@@ -273,62 +302,79 @@ function adicionarValor(coluna) {
   if (novoValor) {
     const select = document.getElementById(coluna);
     
-    // Verificar se o valor já existe
-    const valorExiste = Array.from(select.options).some(opt => opt.value === novoValor);
+    // Verificar se o valor já existe (case insensitive)
+    const valorExiste = Array.from(select.options).some(opt => 
+      opt.value.toLowerCase() === novoValor.toLowerCase()
+    );
+    
     if (valorExiste) {
       alert("Este valor já existe!");
       return;
     }
 
-    // Adicionar nova opção
+    // Adicionar nova opção e selecionar
     const option = document.createElement("option");
     option.value = novoValor;
     option.textContent = novoValor;
+    option.selected = true;
     select.appendChild(option);
-    select.value = novoValor;
     novoValorInput.value = '';
     
     // Atualizar dados na memória
     const cod = document.getElementById("modal-cod").textContent;
     const perguntaIndex = dadosCombinados.findIndex(p => p.COD === cod);
-    dadosCombinados[perguntaIndex][coluna] = novoValor;
     
-    // Atualizar perguntas2
-    const pergunta2Index = perguntas2.findIndex(p => p.COD === cod);
-    perguntas2[pergunta2Index][coluna] = novoValor;
+    // Obter valores atuais (sem duplicatas)
+    const valoresAtuais = dadosCombinados[perguntaIndex][coluna] ? 
+      [...new Set(dadosCombinados[perguntaIndex][coluna].split('|').map(v => v.trim()))] : [];
+    
+    // Adicionar novo valor se não existir
+    if (!valoresAtuais.some(v => v.toLowerCase() === novoValor.toLowerCase())) {
+      valoresAtuais.push(novoValor);
+      dadosCombinados[perguntaIndex][coluna] = valoresAtuais.join('|');
+      
+      // Atualizar perguntas2
+      const pergunta2Index = perguntas2.findIndex(p => p.COD === cod);
+      perguntas2[pergunta2Index][coluna] = valoresAtuais.join('|');
+    }
 
-    // Atualizar a lista de filtros
+    // Atualizar filtros
     atualizarListaFiltros(coluna, novoValor);
   }
 }
 function atualizarListaFiltros(coluna, novoValor) {
-  // Encontrar o container do filtro correspondente
   const filtrosContainer = document.getElementById("filtros");
   const filtroDivs = filtrosContainer.querySelectorAll('.filtro');
   
   for (const filtroDiv of filtroDivs) {
     const titulo = filtroDiv.querySelector('h3');
     if (titulo && titulo.textContent === coluna) {
-      // Criar novo botão para o valor
-      const novoBotao = document.createElement("button");
-      novoBotao.textContent = `${novoValor} (1)`; // Contagem inicial 1
-      novoBotao.dataset.filtro = coluna;
-      novoBotao.dataset.valor = novoValor;
+      // Verificar se o valor já existe (case insensitive)
+      const botaoExistente = Array.from(filtroDiv.querySelectorAll('button'))
+        .find(b => b.dataset.valor.toLowerCase() === novoValor.toLowerCase());
       
-      // Inserir o novo botão (ordenado alfabeticamente)
-      const botoes = Array.from(filtroDiv.querySelectorAll('button'));
-      let inserido = false;
-      
-      for (let i = 0; i < botoes.length; i++) {
-        if (novoValor.localeCompare(botoes[i].textContent.split(' ')[0]) < 0) {
-          filtroDiv.insertBefore(novoBotao, botoes[i]);
-          inserido = true;
-          break;
+      if (!botaoExistente) {
+        // Criar novo botão para o valor
+        const novoBotao = document.createElement("button");
+        novoBotao.textContent = `${novoValor} (${contarPerguntas(perguntas2, coluna, novoValor)})`;
+        novoBotao.dataset.filtro = coluna;
+        novoBotao.dataset.valor = novoValor;
+        
+        // Inserir em ordem alfabética
+        const botoes = Array.from(filtroDiv.querySelectorAll('button'));
+        let inserido = false;
+        
+        for (let i = 0; i < botoes.length; i++) {
+          if (novoValor.localeCompare(botoes[i].dataset.valor) < 0) {
+            filtroDiv.insertBefore(novoBotao, botoes[i]);
+            inserido = true;
+            break;
+          }
         }
-      }
-      
-      if (!inserido) {
-        filtroDiv.appendChild(novoBotao);
+        
+        if (!inserido) {
+          filtroDiv.appendChild(novoBotao);
+        }
       }
       
       break;
@@ -338,7 +384,6 @@ function atualizarListaFiltros(coluna, novoValor) {
 function salvarEdicao() {
   const cod = document.getElementById("modal-cod").textContent;
   const form = document.getElementById("form-edicao");
-  const formData = new FormData(form);
   
   // Registrar alterações
   if (!dadosEditados.perguntas2) dadosEditados.perguntas2 = [...perguntas2];
@@ -347,20 +392,49 @@ function salvarEdicao() {
   const pergunta2Index = perguntas2.findIndex(p => p.COD === cod);
   const pergunta3Index = perguntas3.findIndex(p => p.COD === cod);
 
+  // Atualizar campos de perguntas2 (valores múltiplos)
   Object.keys(perguntas2[0]).forEach(coluna => {
-    if (coluna !== "COD" && formData.has(coluna)) {
-      perguntas2[pergunta2Index][coluna] = formData.get(coluna);
+    if (coluna !== "COD") {
+      const select = document.getElementById(coluna);
+      if (select) {
+        if (select.multiple) {
+          // Para campos múltiplos, juntar valores selecionados
+          const selectedValues = Array.from(select.selectedOptions)
+            .map(opt => opt.value)
+            .filter(v => v); // Remover valores vazios
+          
+          perguntas2[pergunta2Index][coluna] = selectedValues.join('|');
+        } else {
+          perguntas2[pergunta2Index][coluna] = select.value;
+        }
+      }
     }
   });
 
+  // Atualizar campos booleanos de perguntas3
   Object.keys(perguntas3[0]).forEach(coluna => {
-    if (coluna !== "COD" && formData.has(coluna)) {
-      perguntas3[pergunta3Index][coluna] = formData.get(coluna);
+    if (coluna !== "COD") {
+      const select = document.getElementById(coluna);
+      if (select) {
+        perguntas3[pergunta3Index][coluna] = select.value;
+      }
     }
   });
 
+  // Atualizar dados combinados
+  dadosCombinados = combinarDados(perguntas, perguntas2, perguntas3);
+  
+  // Forçar atualização completa da interface
+  const filtrosAtivos = obterFiltrosAtivos();
+  atualizarBolinhas(dadosCombinados, filtrosAtivos);
+  atualizarPerguntasFiltradas(dadosCombinados, filtrosAtivos);
+  atualizarContagemFiltros(dadosCombinados, filtrosAtivos);
+  
   alteracoesPendentes++;
   atualizarContador();
+  
+  // Fechar modal
+  document.getElementById("modal-edicao").style.display = "none";
 }
 
 function exportarParaCSV() {
@@ -370,16 +444,16 @@ function exportarParaCSV() {
   };
 
   const perguntas2CSV = [
-    Object.keys(dados.perguntas2[0]).join(";"),
+    Object.keys(dados.perguntas2[0]).join(","),
     ...dados.perguntas2.map(obj => 
-      Object.values(obj).map(v => `"${v}"`).join(";")
+      Object.values(obj).map(v => `"${v}"`).join(",")
     )
   ].join("\n");
 
   const perguntas3CSV = [
-    Object.keys(dados.perguntas3[0]).join(";"),
+    Object.keys(dados.perguntas3[0]).join(","),
     ...dados.perguntas3.map(obj => 
-      Object.values(obj).map(v => `"${v}"`).join(";")
+      Object.values(obj).map(v => `"${v}"`).join(",")
     )
   ].join("\n");
 
@@ -431,13 +505,22 @@ function removeHighlight() {
 }
 
 function passaFiltros(pergunta, filtrosAtivos) {
+  if (!filtrosAtivos.length) return true;
+  
   return filtrosAtivos.every(filtro => {
-    if (filtro.valor === "1") {
-      // Filtro booleano (Classificação DSK)
-      return pergunta[filtro.filtro] === "1";
-    } else {
-      // Filtro baseado em valores únicos
-      return pergunta[filtro.filtro] === filtro.valor;
+    try {
+      if (filtro.valor === "1") {
+        return pergunta[filtro.filtro] === "1";
+      } else {
+        if (!pergunta[filtro.filtro]) return false;
+        return pergunta[filtro.filtro]
+          .split('|')
+          .map(v => v.trim())
+          .includes(filtro.valor);
+      }
+    } catch (e) {
+      console.error("Erro ao processar filtro:", e);
+      return false;
     }
   });
 }
@@ -469,28 +552,29 @@ function atualizarContagemFiltros(dadosCombinados, filtrosAtivos) {
     const perguntasFiltradas = dadosCombinados.filter(pergunta =>
       filtrosAtivos.every(f => {
         if (f.valor === "1") {
-          // Filtro booleano (Classificação DSK)
           return pergunta[f.filtro] === "1";
         } else {
-          // Filtro baseado em valores únicos
-          return pergunta[f.filtro] === f.valor;
+          if (!pergunta[f.filtro]) return false;
+          const valores = pergunta[f.filtro].split('|').map(v => v.trim());
+          return valores.includes(f.valor);
         }
       })
     );
 
-    // Contar perguntas que correspondem ao valor do filtro
+    // Contar perguntas que correspondem ao valor do filtro atual
     const contagem = perguntasFiltradas.filter(pergunta => {
       if (valor === "1") {
-        // Filtro booleano (Classificação DSK)
         return pergunta[filtro] === "1";
       } else {
-        // Filtro baseado em valores únicos
-        return pergunta[filtro] === valor;
+        if (!pergunta[filtro]) return false;
+        const valores = pergunta[filtro].split('|').map(v => v.trim());
+        return valores.includes(valor);
       }
     }).length;
 
-    // Atualizar texto do botão
-    botao.textContent = `${filtro}${valor === "1" ? "" : `: ${valor}`} (${contagem})`;
+    // Atualizar texto do botão mantendo o formato original
+    const textoOriginal = botao.textContent.split('(')[0].trim();
+    botao.textContent = `${textoOriginal} (${contagem})`;
 
     // Desabilitar botão se a contagem for 0
     if (contagem === 0) {
